@@ -510,12 +510,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.updateInventory(inventory.productId, inventory);
       }
 
-      // Create orders
+      // Create orders with historical data spread across recent months
       const orders = [
+        // August 2024
         {
           customerId: createdCustomers[0].id,
-          orderNumber: "ORD-2024-001",
-          orderDate: new Date('2024-01-15'),
+          orderNumber: "ORD-2024-008",
+          orderDate: new Date('2024-08-15'),
           status: "delivered",
           subtotal: "85500",
           totalAmount: "85500",
@@ -525,54 +526,130 @@ export async function registerRoutes(app: Express): Promise<Server> {
             { productId: createdProducts[5].id, quantity: 1, unitPrice: "15600", totalPrice: "15600" }
           ]
         },
+        // September 2024
         {
           customerId: createdCustomers[1].id,
-          orderNumber: "ORD-2024-002",
-          orderDate: new Date('2024-01-20'),
-          status: "shipped",
-          subtotal: "47400",
-          totalAmount: "47400",
+          orderNumber: "ORD-2024-009",
+          orderDate: new Date('2024-09-10'),
+          status: "delivered",
+          subtotal: "124300",
+          totalAmount: "124300",
           items: [
-            { productId: createdProducts[2].id, quantity: 2, unitPrice: "18900", totalPrice: "37800" },
-            { productId: createdProducts[7].id, quantity: 1, unitPrice: "9800", totalPrice: "9800" }
+            { productId: createdProducts[2].id, quantity: 3, unitPrice: "18900", totalPrice: "56700" },
+            { productId: createdProducts[0].id, quantity: 2, unitPrice: "28500", totalPrice: "57000" },
+            { productId: createdProducts[4].id, quantity: 1, unitPrice: "4200", totalPrice: "4200" }
           ]
         },
         {
           customerId: createdCustomers[2].id,
-          orderNumber: "ORD-2024-003",
-          orderDate: new Date('2024-01-25'),
-          status: "processing",
-          subtotal: "52150",
-          totalAmount: "52150",
+          orderNumber: "ORD-2024-010",
+          orderDate: new Date('2024-09-25'),
+          status: "delivered",
+          subtotal: "67400",
+          totalAmount: "67400",
           items: [
             { productId: createdProducts[6].id, quantity: 1, unitPrice: "22000", totalPrice: "22000" },
-            { productId: createdProducts[3].id, quantity: 2, unitPrice: "8750", totalPrice: "17500" },
-            { productId: createdProducts[8].id, quantity: 4, unitPrice: "3400", totalPrice: "13600" }
+            { productId: createdProducts[3].id, quantity: 3, unitPrice: "8750", totalPrice: "26250" },
+            { productId: createdProducts[2].id, quantity: 1, unitPrice: "18900", totalPrice: "18900" }
           ]
         },
+        // October 2024
         {
           customerId: createdCustomers[3].id,
-          orderNumber: "ORD-2024-004",
-          orderDate: new Date('2024-02-01'),
-          status: "pending",
-          subtotal: "37900",
-          totalAmount: "37900",
+          orderNumber: "ORD-2024-011",
+          orderDate: new Date('2024-10-08'),
+          status: "delivered",
+          subtotal: "156200",
+          totalAmount: "156200",
           items: [
-            { productId: createdProducts[4].id, quantity: 3, unitPrice: "4200", totalPrice: "12600" },
-            { productId: createdProducts[9].id, quantity: 1, unitPrice: "24500", totalPrice: "24500" }
+            { productId: createdProducts[0].id, quantity: 3, unitPrice: "28500", totalPrice: "85500" },
+            { productId: createdProducts[9].id, quantity: 2, unitPrice: "24500", totalPrice: "49000" },
+            { productId: createdProducts[6].id, quantity: 1, unitPrice: "22000", totalPrice: "22000" }
           ]
         },
         {
           customerId: createdCustomers[4].id,
-          orderNumber: "ORD-2024-005",
-          orderDate: new Date('2024-02-05'),
+          orderNumber: "ORD-2024-012",
+          orderDate: new Date('2024-10-22'),
           status: "delivered",
-          subtotal: "71000",
-          totalAmount: "71000",
+          subtotal: "89350",
+          totalAmount: "89350",
           items: [
+            { productId: createdProducts[1].id, quantity: 4, unitPrice: "12500", totalPrice: "50000" },
+            { productId: createdProducts[3].id, quantity: 2, unitPrice: "8750", totalPrice: "17500" },
+            { productId: createdProducts[8].id, quantity: 6, unitPrice: "3400", totalPrice: "20400" }
+          ]
+        },
+        // November 2024
+        {
+          customerId: createdCustomers[0].id,
+          orderNumber: "ORD-2024-013",
+          orderDate: new Date('2024-11-05'),
+          status: "delivered",
+          subtotal: "198700",
+          totalAmount: "198700",
+          items: [
+            { productId: createdProducts[0].id, quantity: 4, unitPrice: "28500", totalPrice: "114000" },
+            { productId: createdProducts[2].id, quantity: 2, unitPrice: "18900", totalPrice: "37800" },
+            { productId: createdProducts[5].id, quantity: 3, unitPrice: "15600", totalPrice: "46800" }
+          ]
+        },
+        {
+          customerId: createdCustomers[1].id,
+          orderNumber: "ORD-2024-014",
+          orderDate: new Date('2024-11-18'),
+          status: "shipped",
+          subtotal: "112450",
+          totalAmount: "112450",
+          items: [
+            { productId: createdProducts[6].id, quantity: 2, unitPrice: "22000", totalPrice: "44000" },
+            { productId: createdProducts[9].id, quantity: 1, unitPrice: "24500", totalPrice: "24500" },
             { productId: createdProducts[0].id, quantity: 1, unitPrice: "28500", totalPrice: "28500" },
+            { productId: createdProducts[5].id, quantity: 1, unitPrice: "15600", totalPrice: "15600" }
+          ]
+        },
+        // December 2024
+        {
+          customerId: createdCustomers[2].id,
+          orderNumber: "ORD-2024-015",
+          orderDate: new Date('2024-12-10'),
+          status: "delivered",
+          subtotal: "245800",
+          totalAmount: "245800",
+          items: [
+            { productId: createdProducts[0].id, quantity: 5, unitPrice: "28500", totalPrice: "142500" },
+            { productId: createdProducts[1].id, quantity: 3, unitPrice: "12500", totalPrice: "37500" },
+            { productId: createdProducts[2].id, quantity: 2, unitPrice: "18900", totalPrice: "37800" },
+            { productId: createdProducts[3].id, quantity: 3, unitPrice: "8750", totalPrice: "26250" }
+          ]
+        },
+        // January 2025 (current orders)
+        {
+          customerId: createdCustomers[3].id,
+          orderNumber: "ORD-2025-001",
+          orderDate: new Date('2025-01-05'),
+          status: "processing",
+          subtotal: "178900",
+          totalAmount: "178900",
+          items: [
+            { productId: createdProducts[9].id, quantity: 3, unitPrice: "24500", totalPrice: "73500" },
+            { productId: createdProducts[0].id, quantity: 2, unitPrice: "28500", totalPrice: "57000" },
+            { productId: createdProducts[6].id, quantity: 1, unitPrice: "22000", totalPrice: "22000" },
+            { productId: createdProducts[3].id, quantity: 3, unitPrice: "8750", totalPrice: "26250" }
+          ]
+        },
+        {
+          customerId: createdCustomers[4].id,
+          orderNumber: "ORD-2025-002",
+          orderDate: new Date('2025-01-10'),
+          status: "pending",
+          subtotal: "134700",
+          totalAmount: "134700",
+          items: [
+            { productId: createdProducts[0].id, quantity: 3, unitPrice: "28500", totalPrice: "85500" },
+            { productId: createdProducts[2].id, quantity: 1, unitPrice: "18900", totalPrice: "18900" },
             { productId: createdProducts[1].id, quantity: 2, unitPrice: "12500", totalPrice: "25000" },
-            { productId: createdProducts[3].id, quantity: 2, unitPrice: "8750", totalPrice: "17500" }
+            { productId: createdProducts[4].id, quantity: 1, unitPrice: "4200", totalPrice: "4200" }
           ]
         }
       ];

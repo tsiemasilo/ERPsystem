@@ -373,13 +373,13 @@ export class DatabaseStorage implements IStorage {
   async getSalesData(): Promise<{ month: string; revenue: number }[]> {
     const result = await db
       .select({
-        month: sql<string>`to_char(order_date, 'Mon')`,
+        month: sql<string>`to_char(order_date, 'Mon YYYY')`,
         revenue: sql<number>`sum(total_amount)::numeric`,
       })
       .from(orders)
-      .where(sql`order_date >= current_date - interval '6 months'`)
-      .groupBy(sql`extract(month from order_date), to_char(order_date, 'Mon')`)
-      .orderBy(sql`extract(month from order_date)`);
+      .where(sql`order_date >= '2024-08-01'`)
+      .groupBy(sql`extract(year from order_date), extract(month from order_date), to_char(order_date, 'Mon YYYY')`)
+      .orderBy(sql`extract(year from order_date), extract(month from order_date)`);
 
     return result.map(row => ({
       month: row.month,
