@@ -319,6 +319,319 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Seed database with mock data endpoint
+  app.post("/api/seed-data", async (req, res) => {
+    try {
+      // Create customers first
+      const customers = [
+        {
+          customerCode: "VOD001",
+          companyName: "Vodacom Business Solutions",
+          contactPerson: "Thabo Mthembu",
+          email: "thabo.mthembu@vodacom.co.za",
+          phone: "+27 11 653 5000",
+          address: "Vodacom Corporate Park, 082 Vodacom Boulevard, Midrand, 1685",
+          creditLimit: "500000"
+        },
+        {
+          customerCode: "PNP001",
+          companyName: "Pick n Pay Retailers",
+          contactPerson: "Sarah van der Merwe",
+          email: "sarah.vandermerwe@pnp.co.za",
+          phone: "+27 21 658 1000",
+          address: "101 Rosmead Avenue, Kenilworth, Cape Town, 7708",
+          creditLimit: "750000"
+        },
+        {
+          customerCode: "STE001",
+          companyName: "Steinhoff Africa Retail",
+          contactPerson: "David Mbeki",
+          email: "david.mbeki@steinhoff.com",
+          phone: "+27 21 808 4400",
+          address: "28 Sixth Street, Wynberg, Cape Town, 7800",
+          creditLimit: "1000000"
+        },
+        {
+          customerCode: "TIG001",
+          companyName: "Tiger Brands Limited",
+          contactPerson: "Jennifer Adams",
+          email: "jennifer.adams@tigerbrands.com",
+          phone: "+27 11 840 4000",
+          address: "3 Tiger Crescent, Bryanston, Sandton, 2021",
+          creditLimit: "600000"
+        },
+        {
+          customerCode: "BID001",
+          companyName: "Bidvest Group Services",
+          contactPerson: "Michael Johnson",
+          email: "michael.johnson@bidvest.co.za",
+          phone: "+27 11 772 8700",
+          address: "18 Crescent Drive, Melrose Arch, Johannesburg, 2196",
+          creditLimit: "800000"
+        }
+      ];
+
+      const createdCustomers = [];
+      for (const customer of customers) {
+        const created = await storage.createCustomer(customer);
+        createdCustomers.push(created);
+      }
+
+      // Create products
+      const products = [
+        {
+          sku: "LAPTOP-001",
+          name: "Dell Latitude 7420 Business Laptop",
+          description: "14-inch laptop with Intel i7, 16GB RAM, 512GB SSD",
+          category: "Electronics",
+          price: "28500",
+          isActive: true
+        },
+        {
+          sku: "DESK-001",
+          name: "Executive Office Desk - Mahogany",
+          description: "Premium executive desk with built-in cable management",
+          category: "Furniture",
+          price: "12500",
+          isActive: true
+        },
+        {
+          sku: "PHONE-001",
+          name: "Samsung Galaxy S24 Business Edition",
+          description: "Latest smartphone with enterprise security features",
+          category: "Electronics",
+          price: "18900",
+          isActive: true
+        },
+        {
+          sku: "CHAIR-001",
+          name: "Ergonomic Executive Chair",
+          description: "Premium leather executive chair with lumbar support",
+          category: "Furniture",
+          price: "8750",
+          isActive: true
+        },
+        {
+          sku: "PRINTER-001",
+          name: "HP LaserJet Pro M404dn",
+          description: "High-speed monochrome laser printer for office use",
+          category: "Electronics",
+          price: "4200",
+          isActive: true
+        },
+        {
+          sku: "PROJECTOR-001",
+          name: "Epson PowerLite 1795F Wireless",
+          description: "Full HD wireless projector for conference rooms",
+          category: "Electronics",
+          price: "15600",
+          isActive: true
+        },
+        {
+          sku: "TABLE-001",
+          name: "Conference Table - 12 Seater",
+          description: "Solid wood conference table with built-in power outlets",
+          category: "Furniture",
+          price: "22000",
+          isActive: true
+        },
+        {
+          sku: "MONITOR-001",
+          name: "LG UltraWide 34-inch Monitor",
+          description: "34-inch curved ultrawide monitor with USB-C connectivity",
+          category: "Electronics",
+          price: "9800",
+          isActive: true
+        },
+        {
+          sku: "CABINET-001",
+          name: "Filing Cabinet - 4 Drawer Steel",
+          description: "Lockable steel filing cabinet with anti-tip mechanism",
+          category: "Furniture",
+          price: "3400",
+          isActive: true
+        },
+        {
+          sku: "TABLET-001",
+          name: "iPad Pro 12.9-inch with Apple Pencil",
+          description: "Professional tablet with M2 chip and accessories",
+          category: "Electronics",
+          price: "24500",
+          isActive: true
+        }
+      ];
+
+      const createdProducts = [];
+      for (const product of products) {
+        const created = await storage.createProduct(product);
+        createdProducts.push(created);
+      }
+
+      // Create inventory for products
+      const inventoryData = [
+        { productId: createdProducts[0].id, quantityAvailable: 45, reorderPoint: 10, locationCode: "WARE-A" },
+        { productId: createdProducts[1].id, quantityAvailable: 12, reorderPoint: 3, locationCode: "WARE-B" },
+        { productId: createdProducts[2].id, quantityAvailable: 78, reorderPoint: 15, locationCode: "WARE-A" },
+        { productId: createdProducts[3].id, quantityAvailable: 25, reorderPoint: 5, locationCode: "WARE-B" },
+        { productId: createdProducts[4].id, quantityAvailable: 18, reorderPoint: 4, locationCode: "WARE-A" },
+        { productId: createdProducts[5].id, quantityAvailable: 8, reorderPoint: 2, locationCode: "WARE-B" },
+        { productId: createdProducts[6].id, quantityAvailable: 5, reorderPoint: 1, locationCode: "WARE-B" },
+        { productId: createdProducts[7].id, quantityAvailable: 32, reorderPoint: 8, locationCode: "WARE-A" },
+        { productId: createdProducts[8].id, quantityAvailable: 22, reorderPoint: 5, locationCode: "WARE-A" },
+        { productId: createdProducts[9].id, quantityAvailable: 15, reorderPoint: 3, locationCode: "WARE-A" }
+      ];
+
+      for (const inventory of inventoryData) {
+        await storage.updateInventory(inventory.productId, inventory);
+      }
+
+      // Create orders
+      const orders = [
+        {
+          customerId: createdCustomers[0].id,
+          orderNumber: "ORD-2024-001",
+          orderDate: new Date('2024-01-15'),
+          status: "delivered",
+          subtotal: "85500",
+          totalAmount: "85500",
+          items: [
+            { productId: createdProducts[0].id, quantity: 2, unitPrice: "28500" },
+            { productId: createdProducts[1].id, quantity: 1, unitPrice: "12500" },
+            { productId: createdProducts[5].id, quantity: 1, unitPrice: "15600" }
+          ]
+        },
+        {
+          customerId: createdCustomers[1].id,
+          orderNumber: "ORD-2024-002",
+          orderDate: new Date('2024-01-20'),
+          status: "shipped",
+          subtotal: "47400",
+          totalAmount: "47400",
+          items: [
+            { productId: createdProducts[2].id, quantity: 2, unitPrice: "18900" },
+            { productId: createdProducts[7].id, quantity: 1, unitPrice: "9800" }
+          ]
+        },
+        {
+          customerId: createdCustomers[2].id,
+          orderNumber: "ORD-2024-003",
+          orderDate: new Date('2024-01-25'),
+          status: "processing",
+          subtotal: "52150",
+          totalAmount: "52150",
+          items: [
+            { productId: createdProducts[6].id, quantity: 1, unitPrice: "22000" },
+            { productId: createdProducts[3].id, quantity: 2, unitPrice: "8750" },
+            { productId: createdProducts[8].id, quantity: 4, unitPrice: "3400" }
+          ]
+        },
+        {
+          customerId: createdCustomers[3].id,
+          orderNumber: "ORD-2024-004",
+          orderDate: new Date('2024-02-01'),
+          status: "pending",
+          subtotal: "37900",
+          totalAmount: "37900",
+          items: [
+            { productId: createdProducts[4].id, quantity: 3, unitPrice: "4200" },
+            { productId: createdProducts[9].id, quantity: 1, unitPrice: "24500" }
+          ]
+        },
+        {
+          customerId: createdCustomers[4].id,
+          orderNumber: "ORD-2024-005",
+          orderDate: new Date('2024-02-05'),
+          status: "delivered",
+          subtotal: "71000",
+          totalAmount: "71000",
+          items: [
+            { productId: createdProducts[0].id, quantity: 1, unitPrice: "28500" },
+            { productId: createdProducts[1].id, quantity: 2, unitPrice: "12500" },
+            { productId: createdProducts[3].id, quantity: 2, unitPrice: "8750" }
+          ]
+        }
+      ];
+
+      for (const orderData of orders) {
+        const { items, ...order } = orderData;
+        await storage.createOrder(order, items);
+      }
+
+      // Create ERP integrations
+      const integrations = [
+        {
+          name: "SAP Business One",
+          type: "sap",
+          status: "active",
+          apiEndpoint: "https://api.sap.com/v1/businessone",
+          syncStatus: "success",
+          lastSyncDate: new Date('2024-02-10T14:30:00Z'),
+          configuration: {
+            apiKey: "sap_prod_key_2024_za_001",
+            companyDb: "ACEOL_ZA",
+            serverUrl: "https://sap-b1.aceonline.co.za"
+          }
+        },
+        {
+          name: "Odoo ERP Cloud",
+          type: "odoo",
+          status: "active",
+          apiEndpoint: "https://mycompany.odoo.co.za/api/v2",
+          syncStatus: "success",
+          lastSyncDate: new Date('2024-02-10T12:15:00Z'),
+          configuration: {
+            apiKey: "odoo_cloud_key_za_prod_001",
+            database: "aceol_prod",
+            username: "integration_user"
+          }
+        },
+        {
+          name: "Kingdee Cloud",
+          type: "kingdee",
+          status: "inactive",
+          apiEndpoint: "https://api.kingdee.com/v3/za",
+          syncStatus: "error",
+          lastSyncDate: new Date('2024-02-09T16:45:00Z'),
+          configuration: {
+            apiKey: "kingdee_za_enterprise_key_001",
+            accountId: "ACE_ZA_001",
+            region: "za-central"
+          }
+        },
+        {
+          name: "Microsoft Dynamics 365",
+          type: "dynamics365",
+          status: "active",
+          apiEndpoint: "https://api.dynamics.microsoft.com/v1",
+          syncStatus: "success",
+          lastSyncDate: new Date('2024-02-10T13:20:00Z'),
+          configuration: {
+            apiKey: "dynamics_365_za_prod_key_001",
+            organizationUrl: "https://aceonline.crm4.dynamics.com",
+            clientId: "d365-ace-client-001"
+          }
+        }
+      ];
+
+      for (const integration of integrations) {
+        await storage.createErpIntegration(integration);
+      }
+
+      res.json({ 
+        message: "Mock data seeded successfully",
+        summary: {
+          customers: createdCustomers.length,
+          products: createdProducts.length,
+          orders: orders.length,
+          integrations: integrations.length
+        }
+      });
+    } catch (error) {
+      console.error("Error seeding data:", error);
+      res.status(500).json({ message: "Failed to seed mock data" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
