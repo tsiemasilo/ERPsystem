@@ -113,4 +113,18 @@ Preferred communication style: Simple, everyday language.
 - `npm run start`: Production server execution
 - `npm run db:push`: Database schema deployment
 
+### Deployment Configuration
+- **Netlify**: Ready for serverless deployment with `netlify.toml` configuration
+- **Database**: Uses Neon Database with serverless connection pooling
+- **Functions**: Serverless API functions configured for Netlify Functions
+- **Environment**: Requires `DATABASE_URL` environment variable
+
+### Recent Changes
+- Added comprehensive mock data across all categories (January 2025)
+- Created 35+ products across 8 categories with realistic inventory
+- Generated 55+ orders with diverse status distribution
+- Implemented complete dashboard analytics with real data
+- Configured Netlify deployment with serverless functions
+- Added build scripts and deployment documentation
+
 The application follows a monorepo structure with shared TypeScript types and schemas, enabling type safety across the full stack while maintaining clear separation between client and server code.
