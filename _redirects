@@ -1,0 +1,4 @@
+/api/dashboard/kpis /.netlify/functions/kpis 200
+/api/test /.netlify/functions/test 200
+/api/hello /.netlify/functions/hello 200
+/* /index.html 200
