@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Corporate colors matching design */
+  --corporate-primary: hsl(207, 90%, 54%);
+  --corporate-secondary: hsl(0, 0%, 26%);
+  --corporate-accent: hsl(36, 100%, 50%);
+  --corporate-success: hsl(122, 39%, 49%);
+  --corporate-warning: hsl(36, 100%, 50%);
+  --corporate-error: hsl(4, 90%, 58%);
+  --corporate-gray-50: hsl(0, 0%, 98%);
+  --corporate-gray-600: hsl(0, 0%, 46%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  /* Custom corporate styling */
+  .corporate-primary {
+    background-color: var(--corporate-primary);
+    color: white;
+  }
+
+  .corporate-success {
+    background-color: var(--corporate-success);
+    color: white;
+  }
+
+  .corporate-warning {
+    background-color: var(--corporate-warning);
+    color: white;
+  }
+
+  .corporate-error {
+    background-color: var(--corporate-error);
+    color: white;
+  }
+
+  /* Professional table styling */
+  .professional-table {
+    @apply w-full border-collapse;
+  }
+
+  .professional-table th {
+    @apply bg-gray-50 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-b border-gray-200;
+  }
+
+  .professional-table td {
+    @apply px-6 py-4 whitespace-nowrap text-sm text-gray-900 border-b border-gray-200;
+  }
+
+  .professional-table tbody tr:hover {
+    @apply bg-gray-50;
+  }
+
+  /* Status badges */
+  .status-completed {
+    @apply inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800;
+  }
+
+  .status-processing {
+    @apply inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800;
+  }
+
+  .status-shipped {
+    @apply inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800;
+  }
+
+  .status-pending {
+    @apply inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800;
+  }
+
+  .status-cancelled {
+    @apply inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800;
+  }
+
+  /* Professional card styling */
+  .professional-card {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200;
+  }
+
+  .professional-card-header {
+    @apply p-6 border-b border-gray-200;
+  }
+
+  .professional-card-content {
+    @apply p-6;
+  }
+
+  /* Chart container styling */
+  .chart-container {
+    @apply relative w-full h-64;
+  }
+
+  /* Professional form styling */
+  .professional-form {
+    @apply space-y-6;
+  }
+
+  .professional-form-field {
+    @apply space-y-2;
+  }
+
+  .professional-form-label {
+    @apply text-sm font-medium text-gray-700;
+  }
+
+  .professional-form-input {
+    @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm;
+  }
+}
