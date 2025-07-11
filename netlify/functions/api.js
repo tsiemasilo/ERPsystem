@@ -1,30 +1,18 @@
-// netlify/functions/api.js
-import serverless from "serverless-http";
-import express from "express";
-import { createServer } from "http";
-import {
-  pgTable,
-  text,
-  serial,
-  integer,
-  decimal,
-  timestamp,
-  varchar,
-  boolean,
-  jsonb
-} from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
-import { relations } from "drizzle-orm";
-import { Pool, neonConfig } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-serverless";
-import ws from "ws";
-import { eq, desc, asc, sql, lt } from "drizzle-orm";
-import { z } from "zod";
 var __defProp = Object.defineProperty;
 var __export = (target, all) => {
   for (var name in all)
     __defProp(target, name, { get: all[name], enumerable: true });
 };
+
+// netlify/functions/api.ts
+import serverless from "serverless-http";
+import express from "express";
+import cors from "cors";
+
+// server/routes.ts
+import { createServer } from "http";
+
+// shared/schema.ts
 var schema_exports = {};
 __export(schema_exports, {
   customers: () => customers,
@@ -47,6 +35,19 @@ __export(schema_exports, {
   productsRelations: () => productsRelations,
   users: () => users
 });
+import {
+  pgTable,
+  text,
+  serial,
+  integer,
+  decimal,
+  timestamp,
+  varchar,
+  boolean,
+  jsonb
+} from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+import { relations } from "drizzle-orm";
 var users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
@@ -204,6 +205,11 @@ var insertErpIntegrationSchema = createInsertSchema(erpIntegrations).omit({
   createdAt: true,
   updatedAt: true
 });
+
+// server/db.ts
+import { Pool, neonConfig } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-serverless";
+import ws from "ws";
 neonConfig.webSocketConstructor = ws;
 if (!process.env.DATABASE_URL) {
   throw new Error(
@@ -212,6 +218,9 @@ if (!process.env.DATABASE_URL) {
 }
 var pool = new Pool({ connectionString: process.env.DATABASE_URL });
 var db = drizzle({ client: pool, schema: schema_exports });
+
+// server/storage.ts
+import { eq, desc, asc, sql, lt } from "drizzle-orm";
 var DatabaseStorage = class {
   // User operations
   async getUser(id) {
@@ -402,6 +411,9 @@ var DatabaseStorage = class {
   }
 };
 var storage = new DatabaseStorage();
+
+// server/routes.ts
+import { z } from "zod";
 async function registerRoutes(app2) {
   app2.get("/api/dashboard/kpis", async (req, res) => {
     try {
@@ -1068,7 +1080,11 @@ async function registerRoutes(app2) {
   const httpServer = createServer(app2);
   return httpServer;
 }
+
+// netlify/functions/api.ts
 var app = express();
+app.use(cors());
+app.use(express.json());
 registerRoutes(app);
 var handler = serverless(app);
 export {
