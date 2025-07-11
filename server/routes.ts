@@ -1,12 +1,19 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { db } from "./db";
 import { 
   insertProductSchema, 
   insertCustomerSchema, 
   insertOrderSchema,
   insertOrderItemSchema,
-  insertErpIntegrationSchema 
+  insertErpIntegrationSchema,
+  products,
+  customers,
+  orders,
+  orderItems,
+  inventory,
+  erpIntegrations
 } from "@shared/schema";
 import { z } from "zod";
 
@@ -319,6 +326,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Clear database endpoint
+  app.delete("/api/clear-data", async (req, res) => {
+    try {
+      // Clear in correct order due to foreign key constraints
+      await db.delete(orderItems);
+      await db.delete(orders);
+      await db.delete(inventory);
+      await db.delete(products);
+      await db.delete(customers);
+      await db.delete(erpIntegrations);
+      
+      res.json({ message: "Database cleared successfully" });
+    } catch (error) {
+      console.error("Error clearing data:", error);
+      res.status(500).json({ message: "Failed to clear database" });
+    }
+  });
+
   // Seed database with mock data endpoint
   app.post("/api/seed-data", async (req, res) => {
     try {
@@ -495,9 +520,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           subtotal: "85500",
           totalAmount: "85500",
           items: [
-            { productId: createdProducts[0].id, quantity: 2, unitPrice: "28500" },
-            { productId: createdProducts[1].id, quantity: 1, unitPrice: "12500" },
-            { productId: createdProducts[5].id, quantity: 1, unitPrice: "15600" }
+            { productId: createdProducts[0].id, quantity: 2, unitPrice: "28500", totalPrice: "57000" },
+            { productId: createdProducts[1].id, quantity: 1, unitPrice: "12500", totalPrice: "12500" },
+            { productId: createdProducts[5].id, quantity: 1, unitPrice: "15600", totalPrice: "15600" }
           ]
         },
         {
@@ -508,8 +533,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           subtotal: "47400",
           totalAmount: "47400",
           items: [
-            { productId: createdProducts[2].id, quantity: 2, unitPrice: "18900" },
-            { productId: createdProducts[7].id, quantity: 1, unitPrice: "9800" }
+            { productId: createdProducts[2].id, quantity: 2, unitPrice: "18900", totalPrice: "37800" },
+            { productId: createdProducts[7].id, quantity: 1, unitPrice: "9800", totalPrice: "9800" }
           ]
         },
         {
@@ -520,9 +545,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           subtotal: "52150",
           totalAmount: "52150",
           items: [
-            { productId: createdProducts[6].id, quantity: 1, unitPrice: "22000" },
-            { productId: createdProducts[3].id, quantity: 2, unitPrice: "8750" },
-            { productId: createdProducts[8].id, quantity: 4, unitPrice: "3400" }
+            { productId: createdProducts[6].id, quantity: 1, unitPrice: "22000", totalPrice: "22000" },
+            { productId: createdProducts[3].id, quantity: 2, unitPrice: "8750", totalPrice: "17500" },
+            { productId: createdProducts[8].id, quantity: 4, unitPrice: "3400", totalPrice: "13600" }
           ]
         },
         {
@@ -533,8 +558,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           subtotal: "37900",
           totalAmount: "37900",
           items: [
-            { productId: createdProducts[4].id, quantity: 3, unitPrice: "4200" },
-            { productId: createdProducts[9].id, quantity: 1, unitPrice: "24500" }
+            { productId: createdProducts[4].id, quantity: 3, unitPrice: "4200", totalPrice: "12600" },
+            { productId: createdProducts[9].id, quantity: 1, unitPrice: "24500", totalPrice: "24500" }
           ]
         },
         {
@@ -545,9 +570,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           subtotal: "71000",
           totalAmount: "71000",
           items: [
-            { productId: createdProducts[0].id, quantity: 1, unitPrice: "28500" },
-            { productId: createdProducts[1].id, quantity: 2, unitPrice: "12500" },
-            { productId: createdProducts[3].id, quantity: 2, unitPrice: "8750" }
+            { productId: createdProducts[0].id, quantity: 1, unitPrice: "28500", totalPrice: "28500" },
+            { productId: createdProducts[1].id, quantity: 2, unitPrice: "12500", totalPrice: "25000" },
+            { productId: createdProducts[3].id, quantity: 2, unitPrice: "8750", totalPrice: "17500" }
           ]
         }
       ];
